@@ -1,0 +1,51 @@
+//Interrupts using Arduino
+//Circuit Digest
+
+#include<LiquidCrystal.h>                        // Including lcd display library
+LiquidCrystal lcd (7,8,9,10,11,12);              // Define LCD display pins 
+
+volatile int output = LOW;                      
+int loading = 0;
+int counter = 0;
+
+void setup()                                                      
+
+{
+  lcd.begin(16,2);                              //  setting LCD as 16x2 type
+  lcd.setCursor(0,0);
+  lcd.print("Arijal Ibnu Jati");                                    
+  lcd.setCursor(0,1);
+  lcd.print("081811733021");
+  delay(2000);                                                     
+  lcd.clear();                                                    
+  pinMode(13,OUTPUT);                                           
+                                   
+  attachInterrupt(digitalPinToInterrupt(2),buttonPressed1,RISING);  //  function for creating external interrupts at pin2 on Rising (LOW to HIGH)
+   
+  
+}
+
+void loop()                                                      
+{ 
+  lcd.clear();
+  if(loading<20000){
+    for(int i=0; i<20000; i++){
+   	 loading +=1;
+     lcd.setCursor(0,0);
+     lcd.print("loading:");
+   	 lcd.print(loading);
+   	 delay(1000);
+     lcd.clear(); 
+    }
+  } 
+}
+
+void buttonPressed1()           //ISR function excutes when push button at pinD2 is pressed
+{                    
+   output = LOW;                //Change Output value to LOW                                
+   counter++;
+   lcd.setCursor(0,1);                                          
+   lcd.print("Counter : ");
+   lcd.print(counter);
+}
+
